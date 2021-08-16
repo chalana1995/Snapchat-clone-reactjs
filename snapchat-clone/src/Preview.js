@@ -12,7 +12,8 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import CropIcon from '@material-ui/icons/Crop';
 import TimerIcon from '@material-ui/icons/Timer';
 import SendIcon from '@material-ui/icons/Send';
-
+import { v4 as uuidv4 } from 'uuid';
+import { storage } from './firebase';
 
 
 function Preview() {
@@ -32,6 +33,10 @@ function Preview() {
     }
 
     const sendPost = () => {
+        const id = uuidv4();
+        const uploadImage = storage.ref(`posts/${id}`)
+            .putString(cameraImage, "data_url");
+
         
     }
 
