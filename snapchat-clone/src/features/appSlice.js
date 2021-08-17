@@ -5,22 +5,32 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 export const appSlice = createSlice({
   name: 'app',
   initialState : {
-    value: 0,
-    status: 'idle',
+    user: null,
+    selectImage: null,
   },
-  // The `reducers` field lets us define reducers and generate associated actions
+  
   reducers: {
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
+    login: (state, action) => {
+      state.user = action.payload;
     },
+    logout: (state) => {
+      state.user = null
+    },
+    selectImage: (state, action) => {
+      state.selectImage = action.payload
+    },
+    resetImage: (state) => {
+      state.selectImage = null
+    }
   },
 
 });
 
-export const { incrementByAmount } = appSlice.actions;
+export const { login, logout, selectImage, resetImage } = appSlice.actions;
 
 
-export const appCount = (state) => state.counter.value;
+export const selectUser = (state) => state.app.user;
+export const selectSelectedImage = (state) => state.app.selectImage;
 
 
 export default appSlice.reducer;
