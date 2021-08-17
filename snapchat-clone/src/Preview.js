@@ -13,7 +13,8 @@ import CropIcon from '@material-ui/icons/Crop';
 import TimerIcon from '@material-ui/icons/Timer';
 import SendIcon from '@material-ui/icons/Send';
 import { v4 as uuidv4 } from 'uuid';
-import { storage } from './firebase';
+import { db, storage } from './firebase';
+import firebase from 'firebase';
 
 
 function Preview() {
@@ -34,10 +35,29 @@ function Preview() {
 
     const sendPost = () => {
         const id = uuidv4();
-        const uploadImage = storage.ref(`posts/${id}`)
+        const uploadTask = storage.ref(`posts/${id}`)
             .putString(cameraImage, "data_url");
 
-        
+        uploadTask.on("state_changed", null,
+            (error) => {
+                console.log(error);
+            },
+            () => {
+                storage
+                    .ref('posts')
+                    .child(id)
+                    .getDownloadURL()
+                    .then((url) => {
+                        db.collection('posts').add({
+                            imageUrl: url,
+                            userName: 'chalana',
+                            read: false,
+                            //profilepic,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        history.replace('/chats')
+                    })
+            })
     }
 
     return (
